@@ -20,7 +20,6 @@ This project leverages real-world air quality data to build and evaluate regress
 Air-Quality-Prediction/
 ├── air-quality-prediction.ipynb  # Main Jupyter notebook
 ├── requirements.txt              # Project dependencies
-├── random_forest_model.pkl       # Saved Random Forest model
 ├── README.md                     # Project documentation
 └── .gitignore
 ```
