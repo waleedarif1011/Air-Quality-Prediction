@@ -1,33 +1,68 @@
-# Air-Quality-Prediction
+# Air Quality Prediction
 
-This project explores and predicts Air Quality Index (AQI) using machine learning models. The dataset is analyzed, visualized, cleaned, and used to train regression models (Linear Regression and Random Forest) with hyperparameter tuning and evaluation.
+Predicting Air Quality Index (AQI) using advanced machine learning techniques.
 
-## Features
-- Data cleaning and preprocessing
-- Data visualization (pairplot, heatmap, boxplot)
-- Regression modeling (Linear Regression, Random Forest)
+---
+
+## 🚀 Project Overview
+This project leverages real-world air quality data to build and evaluate regression models for predicting AQI. The workflow includes data cleaning, visualization, feature engineering, model training (Linear Regression & Random Forest), hyperparameter tuning, and model evaluation.
+
+## ✨ Features
+- Data cleaning & preprocessing
+- Exploratory data analysis (EDA) with visualizations
+- Regression modeling: Linear Regression & Random Forest
 - Hyperparameter tuning (GridSearchCV, RandomizedSearchCV)
-- Model evaluation (MSE, RMSE, MAE, R²)
-- Model saving and loading
+- Model evaluation: MSE, RMSE, MAE, R²
+- Model saving & loading (joblib)
 
-## Getting Started
-
-### Requirements
-Install dependencies:
-```bash
-pip install -r requirements.txt
+## 📁 Project Structure
+```
+Air-Quality-Prediction/
+├── air-quality-prediction.ipynb  # Main Jupyter notebook
+├── requirements.txt              # Project dependencies
+├── random_forest_model.pkl       # Saved Random Forest model
+├── README.md                     # Project documentation
+└── .gitignore
 ```
 
-### Usage
-1. Download the dataset from KaggleHub as shown in the notebook.
-2. Run the Jupyter notebook in the `Notebook` folder:
-```bash
-jupyter notebook air-quality-prediction.ipynb
-```
-3. Follow the notebook cells for data exploration, modeling, and evaluation.
+## 🛠️ Installation
+1. **Clone the repository:**
+   ```bash
+   git clone <repo-url>
+   cd Air-Quality-Prediction
+   ```
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Developer
-This project was developed by a data science enthusiast passionate about AI and MLs. Contributions and suggestions are welcome!
+## 📊 Usage
+1. **Download the dataset:**
+   - The dataset is fetched from KaggleHub in the notebook. No manual download required.
+2. **Run the notebook:**
+   ```bash
+   jupyter notebook air-quality-prediction.ipynb
+   ```
+3. **Follow the notebook cells:**
+   - Data exploration, cleaning, modeling, and evaluation are all step-by-step in the notebook.
 
-## License
-This project is open-source and available under the MIT License.
+## 🧠 Model Details
+- **Linear Regression:** Baseline model for AQI prediction.
+- **Random Forest Regressor:** Advanced model with hyperparameter tuning for improved accuracy.
+- **Evaluation Metrics:**
+  - Mean Squared Error (MSE)
+  - Root Mean Squared Error (RMSE)
+  - Mean Absolute Error (MAE)
+  - R² Score
+- **Model Saving:** Trained models are saved as `.pkl` files for reuse.
+
+## 📈 Results
+- The Random Forest model outperformed Linear Regression in all evaluation metrics.
+- For detailed results and visualizations, see the notebook's conclusion section.
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome! Feel free to fork the repo and submit a pull request.
+
+## 👤 Author
+Developed by a data science enthusiast passionate about AI and ML Engineer.
+
