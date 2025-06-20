@@ -64,5 +64,4 @@ Air-Quality-Prediction/
 Contributions, issues, and feature requests are welcome! Feel free to fork the repo and submit a pull request.
 
 ## 👤 Author
-Developed by a data science enthusiast passionate about AI and ML Engineer.
-
+Developed by a data science enthusiast and passionate about AI and ML Engineer.
