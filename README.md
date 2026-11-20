@@ -1,66 +1,101 @@
-# Air Quality Prediction
-
-Predicting Air Quality Index (AQI) using advanced machine learning techniques.
-
+---
+title: Air Quality Prediction
+emoji: 🌬️
+colorFrom: green
+colorTo: blue
+sdk: gradio
+sdk_version: 5.49.1
+app_file: app.py
+pinned: false
+license: mit
 ---
 
-## 🚀 Project Overview
-This project leverages real-world air quality data to build and evaluate regression models for predicting AQI. The workflow includes data cleaning, visualization, feature engineering, model training (Linear Regression & Random Forest), hyperparameter tuning, and model evaluation.
+# Air Quality Prediction
 
-## ✨ Features
-- Data cleaning & preprocessing
-- Exploratory data analysis (EDA) with visualizations
-- Regression modeling: Linear Regression & Random Forest
-- Hyperparameter tuning (GridSearchCV, RandomizedSearchCV)
-- Model evaluation: MSE, RMSE, MAE, R²
-- Model saving & loading (joblib)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Hugging%20Face%20Spaces-yellow?logo=huggingface)](https://huggingface.co/spaces/waleedarif1011/air-quality-prediction)
+[![CI](https://github.com/waleedarif1011/air-quality-prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/waleedarif1011/air-quality-prediction/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## 📁 Project Structure
+Predict **Air Quality Index (AQI)** from pollutant concentrations (CO, NO₂, SO₂, O₃, PM2.5, PM10), map the score to official **EPA health categories**, and explore a live Gradio calculator with city/event presets.
+
+> **Live demo:** after the Hugging Face Space is created (see [Deploy](#deploy-hugging-face-space)), open the badge URL above. Until then, run locally with `python app.py`.
+
+## Results (held-out 20%)
+
+| Model | R² | MAE | RMSE |
+|-------|----|-----|------|
+| Linear Regression | 0.991 | 3.77 | 4.71 |
+| Random Forest | 0.992 | 3.55 | 4.39 |
+| **HistGradientBoosting** | **0.992** | **3.52** | **4.34** |
+
+Best model by R²: `hist_gradient_boosting`. Full numbers: [`artifacts/metrics.json`](artifacts/metrics.json).
+
+### Feature importance & actual vs predicted
+
+![Feature importance](assets/feature_importance.png)
+
+![Actual vs predicted](assets/actual_vs_predicted.png)
+
+## Quickstart
+
+```bash
+python -m pip install -r requirements.txt
+python -m src.train          # train + write artifacts/ and assets/
+python app.py                # Gradio demo at http://127.0.0.1:7860
 ```
-Air-Quality-Prediction/
-├── air-quality-prediction.ipynb  # Main Jupyter notebook
-├── requirements.txt              # Project dependencies
-├── README.md                     # Project documentation
-└── .gitignore
+
+### CLI inference
+
+```bash
+python -m src.predict --co 120 --no2 8 --so2 2 --o3 35 --pm25 6 --pm10 12
+python -m src.predict --co 900 --no2 95 --so2 40 --o3 70 --pm25 180 --pm10 320
 ```
 
-## 🛠️ Installation
-1. **Clone the repository:**
-   ```bash
-   git clone <repo-url>
-   cd Air-Quality-Prediction
-   ```
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+Returns JSON with `aqi`, EPA `category`, `color`, and `advisory`.
 
-## 📊 Usage
-1. **Download the dataset:**
-   - The dataset is fetched from KaggleHub in the notebook. No manual download required.
-2. **Run the notebook:**
-   ```bash
-   jupyter notebook air-quality-prediction.ipynb
-   ```
-3. **Follow the notebook cells:**
-   - Data exploration, cleaning, modeling, and evaluation are all step-by-step in the notebook.
+## Method (short)
 
-## 🧠 Model Details
-- **Linear Regression:** Baseline model for AQI prediction.
-- **Random Forest Regressor:** Advanced model with hyperparameter tuning for improved accuracy.
-- **Evaluation Metrics:**
-  - Mean Squared Error (MSE)
-  - Root Mean Squared Error (RMSE)
-  - Mean Absolute Error (MAE)
-  - R² Score
-- **Model Saving:** Trained models are saved as `.pkl` files for reuse.
+- **Data:** Bundled `data/air_quality_sample.csv` (4k rows, six cities / pollutants + AQI). Optional full Kaggle pull via `scripts/fetch_data.py` when credentials exist.
+- **Split:** 80/20 train/test (`random_state=42`).
+- **Models:** Linear Regression (scaled), Random Forest, HistGradientBoosting — best saved to `artifacts/aqi_model.joblib`.
+- **EPA mapping:** Good (0–50) → Hazardous (301+) with health advisory text in `src/predict.py`.
+- **Demo presets:** Clean coastal day, Rush-hour smog, Wildfire smoke event.
 
-## 📈 Results
-- The Random Forest model outperformed Linear Regression in all evaluation metrics.
-- For detailed results and visualizations, see the notebook's conclusion section.
+## Tests & CI
 
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome! Feel free to fork the repo and submit a pull request.
+```bash
+python -m pytest -q
+```
 
-## 👤 Author
-Developed by a data science enthusiast and passionate about AI and ML Engineer.
+GitHub Actions runs the same suite on every push/PR (`.github/workflows/ci.yml`).
+
+## Deploy (Hugging Face Space)
+
+This repo is Space-ready (`app.py` + Gradio README frontmatter). Create and push:
+
+```bash
+# once: huggingface-cli login   # needs a write token with Spaces scope
+huggingface-cli repo create air-quality-prediction --type space --space_sdk gradio -y
+git remote add space https://huggingface.co/spaces/waleedarif1011/air-quality-prediction
+git push space HEAD:main
+```
+
+Step-by-step: [`docs/hf-space-deploy.md`](docs/hf-space-deploy.md).
+
+## Layout
+
+```
+app.py                 Gradio AQI calculator (3 presets)
+src/train.py           multi-model train + metrics/plots
+src/predict.py         CLI + EPA category mapping
+data/air_quality_sample.csv
+scripts/fetch_data.py  optional Kaggle download
+artifacts/             model + metrics.json
+assets/                feature importance + actual-vs-predicted
+notebooks/             original exploratory notebook
+tests/                 pytest suite
+```
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).

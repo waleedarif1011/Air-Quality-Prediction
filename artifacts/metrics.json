@@ -1,0 +1,55 @@
+{
+  "n_samples": 4000,
+  "n_train": 3200,
+  "n_test": 800,
+  "features": [
+    "CO",
+    "NO2",
+    "SO2",
+    "O3",
+    "PM2.5",
+    "PM10"
+  ],
+  "test_size": 0.2,
+  "random_state": 42,
+  "best_model": "hist_gradient_boosting",
+  "best": {
+    "name": "hist_gradient_boosting",
+    "r2": 0.9920860511044283,
+    "mae": 3.52226296816417,
+    "rmse": 4.335051066700544
+  },
+  "models": [
+    {
+      "name": "linear_regression",
+      "r2": 0.990677678128123,
+      "mae": 3.768335131765345,
+      "rmse": 4.7050001753069255
+    },
+    {
+      "name": "random_forest",
+      "r2": 0.9918955811843245,
+      "mae": 3.550655222461371,
+      "rmse": 4.386908085417954
+    },
+    {
+      "name": "hist_gradient_boosting",
+      "r2": 0.9920860511044283,
+      "mae": 3.52226296816417,
+      "rmse": 4.335051066700544
+    }
+  ],
+  "feature_importance": {
+    "CO": 0.004046429758814687,
+    "NO2": 0.06354143252697025,
+    "SO2": 0.004076997761555331,
+    "O3": 0.004667072617772191,
+    "PM2.5": 0.6250896939023748,
+    "PM10": 0.29857837343251276
+  },
+  "artifacts": {
+    "model": "artifacts/aqi_model.joblib",
+    "feature_importance": "assets/feature_importance.png",
+    "actual_vs_predicted": "assets/actual_vs_predicted.png"
+  }
+}
