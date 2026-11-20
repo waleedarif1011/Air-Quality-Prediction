@@ -1,5 +1,5 @@
 ---
-title: Air Quality Prediction
+title: Air Quality AQI Explainer
 emoji: 🌬️
 colorFrom: green
 colorTo: blue
@@ -10,15 +10,25 @@ pinned: false
 license: mit
 ---
 
-# Air Quality Prediction
+# Air Quality — EPA AQI Explainer
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Hugging%20Face%20Spaces-yellow?logo=huggingface)](https://huggingface.co/spaces/waleedarif1011/air-quality-prediction)
 [![CI](https://github.com/waleedarif1011/air-quality-prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/waleedarif1011/air-quality-prediction/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Predict **Air Quality Index (AQI)** from pollutant concentrations (CO, NO₂, SO₂, O₃, PM2.5, PM10), map the score to official **EPA health categories**, and explore a live Gradio calculator with city/event presets.
+**GitHub description (suggested):** EPA AQI category mapper + Gradio explainer — pollutants → AQI (derived target; high R² expected).
+
+Interactive **EPA Air Quality Index (AQI) explainer**: enter pollutant concentrations (CO, NO₂, SO₂, O₃, PM2.5, PM10), see a mapped **EPA health category** (Good → Hazardous), and compare a small regression model that recovers AQI from those same inputs.
+
+> **What this is (and isn’t):** Official AQI is largely a **deterministic function of pollutant concentrations**. The features here *are* the pollutants that define AQI, so an R² near **0.99** is **expected** — a model-check / teaching demo, **not** a forecasting breakthrough or next-hour prediction from meteorology/lags.
 
 > **Live demo:** after the Hugging Face Space is created (see [Deploy](#deploy-hugging-face-space)), open the badge URL above. Until then, run locally with `python app.py`.
+
+## What you get
+
+1. **Category mapper** — AQI score → EPA band + short health advisory.
+2. **Model check** — HistGradientBoosting (and baselines) fitted on the same pollutant → AQI relationship; useful for verifying pipeline/metrics, not for claiming novel air-quality forecast skill.
+3. **Presets** — Clean coastal day, rush-hour smog, wildfire smoke.
 
 ## Results (held-out 20%)
 
@@ -28,7 +38,7 @@ Predict **Air Quality Index (AQI)** from pollutant concentrations (CO, NO₂, SO
 | Random Forest | 0.992 | 3.55 | 4.39 |
 | **HistGradientBoosting** | **0.992** | **3.52** | **4.34** |
 
-Best model by R²: `hist_gradient_boosting`. Full numbers: [`artifacts/metrics.json`](artifacts/metrics.json).
+High R² is expected because the target is derived from the feature pollutants. Full numbers: [`artifacts/metrics.json`](artifacts/metrics.json).
 
 ### Feature importance & actual vs predicted
 
@@ -56,6 +66,7 @@ Returns JSON with `aqi`, EPA `category`, `color`, and `advisory`.
 ## Method (short)
 
 - **Data:** Bundled `data/air_quality_sample.csv` (4k rows, six cities / pollutants + AQI). Optional full Kaggle pull via `scripts/fetch_data.py` when credentials exist.
+- **Features → target:** CO, NO₂, SO₂, O₃, PM2.5, PM10 → AQI (derived from those pollutants).
 - **Split:** 80/20 train/test (`random_state=42`).
 - **Models:** Linear Regression (scaled), Random Forest, HistGradientBoosting — best saved to `artifacts/aqi_model.joblib`.
 - **EPA mapping:** Good (0–50) → Hazardous (301+) with health advisory text in `src/predict.py`.
@@ -85,7 +96,7 @@ Step-by-step: [`docs/hf-space-deploy.md`](docs/hf-space-deploy.md).
 ## Layout
 
 ```
-app.py                 Gradio AQI calculator (3 presets)
+app.py                 Gradio EPA AQI explainer (3 presets)
 src/train.py           multi-model train + metrics/plots
 src/predict.py         CLI + EPA category mapping
 data/air_quality_sample.csv
@@ -95,6 +106,10 @@ assets/                feature importance + actual-vs-predicted
 notebooks/             original exploratory notebook
 tests/                 pytest suite
 ```
+
+## Topics (suggested for GitHub)
+
+`air-quality` · `aqi` · `epa` · `gradio` · `scikit-learn` · `portfolio`
 
 ## License
 

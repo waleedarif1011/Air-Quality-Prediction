@@ -1,4 +1,4 @@
-"""Gradio live demo — pollutant sliders → AQI + EPA health category."""
+"""Gradio live demo — EPA AQI explainer / category mapper from pollutant inputs."""
 
 from __future__ import annotations
 
@@ -72,6 +72,9 @@ def _metrics_blurb() -> str:
         for r in m.get("models", [])
     )
     return (
+        "_AQI is derived from these pollutant features, so R² near 0.99 is "
+        "expected — this is a model check / teaching demo, not a forecasting "
+        "breakthrough._\n\n"
         f"**Best model:** `{best.get('name', '—')}` "
         f"(R²={best.get('r2', float('nan')):.3f}, "
         f"MAE={best.get('mae', float('nan')):.2f})\n\n"
@@ -87,7 +90,7 @@ def _card_html(result: dict) -> str:
 <div style="border-radius:12px;padding:1.1rem 1.25rem;background:{color}22;
             border:2px solid {color};font-family:system-ui,sans-serif;">
   <div style="font-size:0.85rem;letter-spacing:0.04em;text-transform:uppercase;
-              opacity:0.75;">Predicted AQI</div>
+              opacity:0.75;">Mapped AQI</div>
   <div style="font-size:2.6rem;font-weight:700;line-height:1.1;color:#111;">
     {result['aqi']:.0f}
   </div>
@@ -111,7 +114,7 @@ def estimate(co: float, no2: float, so2: float, o3: float, pm25: float, pm10: fl
     }
     result = predict(features, artifact=_get_artifact())
     summary = (
-        f"### AQI **{result['aqi']:.1f}** — {result['category']}\n\n"
+        f"### Mapped AQI **{result['aqi']:.1f}** — {result['category']}\n\n"
         f"{result['advisory']}"
     )
     plot = str(IMPORTANCE_PATH) if IMPORTANCE_PATH.is_file() else None
@@ -126,11 +129,14 @@ def apply_preset(name: str):
 
 def build_ui() -> gr.Blocks:
     defaults = PRESETS[0]["values"]
-    with gr.Blocks(title="Air Quality Prediction") as demo:
+    with gr.Blocks(title="EPA AQI Explainer") as demo:
         gr.Markdown(
-            "# Air Quality Index Predictor\n\n"
-            "Set pollutant concentrations to estimate AQI and the matching "
-            "**EPA health category** (Good → Hazardous).\n\n"
+            "# EPA AQI Explainer / Category Mapper\n\n"
+            "Enter pollutant concentrations (CO, NO₂, SO₂, O₃, PM2.5, PM10) to "
+            "map an **AQI** score and the matching **EPA health category** "
+            "(Good → Hazardous).\n\n"
+            "Official AQI is largely determined by these pollutants — the model "
+            "recovers that relationship as a check, not as novel forecasting.\n\n"
             + _metrics_blurb()
         )
         with gr.Row():
@@ -146,7 +152,7 @@ def build_ui() -> gr.Blocks:
                 o3 = gr.Slider(0, 200, value=defaults["O3"], step=0.1, label="O₃")
                 pm25 = gr.Slider(0, 300, value=defaults["PM2.5"], step=0.1, label="PM2.5")
                 pm10 = gr.Slider(0, 450, value=defaults["PM10"], step=0.1, label="PM10")
-                run = gr.Button("Predict AQI", variant="primary")
+                run = gr.Button("Map AQI category", variant="primary")
             with gr.Column(scale=2):
                 summary = gr.Markdown()
                 card = gr.HTML()
